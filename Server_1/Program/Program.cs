@@ -5,7 +5,7 @@ class Program
 {
     static void Main()
     {
-       /*var connectionString = "Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;";
+        var connectionString = "Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;";
 
         using var connection = new SqlConnection(connectionString);
 
@@ -17,6 +17,6 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine("❌ Connection failed: " + ex.Message);
-        }*/
+        }
     }
 }
