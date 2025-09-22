@@ -1,16 +1,20 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.Data.SqlClient; 
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.Data.SqlClient;
+using System;
 
 
 public class AppDbContext : DbContext
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    if (!optionsBuilder.IsConfigured)
     {
-         optionsBuilder.UseSqlServer
-         ("Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;");
+        var connectionString = "Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;";
+        optionsBuilder.UseSqlServer(connectionString);
     }
+}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
