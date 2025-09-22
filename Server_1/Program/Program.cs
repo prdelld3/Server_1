@@ -1,17 +1,15 @@
-﻿using System;
+﻿using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Data.SqlClient; 
-
 class Program
 {
     static void Main()
     {
-        var connectionString = "Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;";
-
-        using var connection = new SqlConnection(connectionString);
-
+        using var context = new AppDbContext();
         try
         {
-            connection.Open();
+            context.Database.OpenConnection();
             Console.WriteLine("✅ Connected to SQL Server!");
         }
         catch (Exception ex)

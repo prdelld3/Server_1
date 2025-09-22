@@ -1,20 +1,22 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Data.SqlClient; 
+
 
 public class AppDbContext : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer
-            ("Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;");
+         optionsBuilder.UseSqlServer
+         ("Server=localhost,1433;Database=master;User Id=sa;Password=.nGzz8tqt9;TrustServerCertificate=True;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        //base.OnModelCreating(modelBuilder);
 
-        // Example of configuring an entity
+       
         // modelBuilder.Entity<User>(entity =>
         // {
         //     entity.HasKey(e => e.Id);
@@ -26,4 +28,5 @@ public class AppDbContext : DbContext
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }*/
     }
+    
 }
