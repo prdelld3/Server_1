@@ -4,8 +4,9 @@ using Microsoft.Extensions.Options;
 
 public class AppDbContext : DbContext
 {
-
     public DbSet<Author> Authors { get; set; }
+
+    public DbSet<Book> Books { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -20,9 +21,16 @@ public class AppDbContext : DbContext
     }
 }
 
-  public class Author
+public class Author
 {
     public int AuthorId { get; set; }
     public string? Name { get; set; }
-    
+
+}
+
+public class Book
+{
+    public int BookId { get; set; }
+    public string? Title { get; set; }
+    //public List<Author> Credits { get; set; } = new();
 }

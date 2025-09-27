@@ -27,6 +27,7 @@ static class Program
             {
                 case ConsoleKey.D1:
                     //AddData.AddBookAndAuthor();
+                    Register.RegisterBook();
                     break;
 
                 case ConsoleKey.D2:
