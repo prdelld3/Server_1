@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
     public DbSet<Author> Authors { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<Credit> Credits { get; set; }
+    public DbSet<Loan> Loans { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -16,7 +17,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Book>()
-         .HasIndex(b => b.Title)
+            .HasIndex(b => b.Title)
             .IsUnique();
 
         modelBuilder.Entity<Author>()
@@ -38,29 +39,12 @@ public class AppDbContext : DbContext
             .WithOne(c => c.Author)
             .HasForeignKey(c => c.AuthorId)
             .IsRequired();
+
+            modelBuilder.Entity<Loan>()
+            .HasOne(l => l.Book)
+            .WithOne(b => b.Loan)
+            .HasForeignKey<Loan>(l => l.BookId)
+            .IsRequired();
     }
 }
 
-public class Author
-{
-    public int AuthorId { get; set; }
-    public string? Name { get; set; }
-    public List<Credit> Credits { get; set; } = new();
-
-}
-
-public class Book
-{
-    public int BookId { get; set; }
-    public string? Title { get; set; }
-    public List<Credit> Credits { get; set; } = new();
-}
-
-public class Credit
-{
-    public int CreditId { get; set; }
-    public int BookId { get; set; }
-    public Book? Book { get; set; }
-    public int AuthorId { get; set; }
-    public Author? Author { get; set; }
-}

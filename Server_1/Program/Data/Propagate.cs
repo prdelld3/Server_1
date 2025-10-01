@@ -4,34 +4,24 @@ using Microsoft.Extensions.Options;
 using Microsoft.Data.SqlClient;
 public static class Propagate
 {
-    public static void PropogateAuthor()
+    public static void RebootLibrary()
     {
         Console.Clear();
         using var context = new AppDbContext();
 
-        var author = new List<string>
-        {
-            "John Doe",
-            "Jane Smith",
-            "Alice Johnson"
-        };
-        author.ForEach(name =>
-        {
-            var existing = context.Authors.FirstOrDefault(a => a.Name == name);
-            if (existing == null)
-            {
-                context.Authors.Add(new Author { Name = name });
-            }
-        });
-
+        context.Credits.RemoveRange(context.Credits);
+        context.Books.RemoveRange(context.Books);
+        context.Authors.RemoveRange(context.Authors);
         context.SaveChanges();
     }
-    /*public static void PropogateBooks()
+    public static void PropogateLibrary()
     {
+        RebootLibrary();
+        
         Console.Clear();
         using var context = new AppDbContext();
 
-        if (context.Books.Any()) return; // Already populated
+        if (context.Books.Any()) return; 
 
         string[] titles =
         {
@@ -57,11 +47,13 @@ public static class Propagate
             var book = new Book
             {
                 Title = titles[i],
-                Credits = []
+                Loan = null,
+                Credits = new List<Credit>(),
+                //LoanHistories = new List<LoanHistory>()
             };
             context.Books.Add(book);
 
-            // save so IDs exist
+            // cause ID needs to exist!
             context.SaveChanges();
 
             var authorName = authors[i];
@@ -74,7 +66,6 @@ public static class Propagate
                 context.SaveChanges();
             }
 
-            // Link via Credit
             var credit = new Credit
             {
                 Book = book,
@@ -87,5 +78,5 @@ public static class Propagate
 
             context.SaveChanges();
         }
-    }*/
+    }
 }

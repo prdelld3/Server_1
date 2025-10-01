@@ -5,20 +5,23 @@ static class Program
 {
     static void Main()
     {
-        //Propagate.PropogateAuthor();
-        ReadData.ShowAuthors();
+        Console.Clear();
+        Console.WriteLine("Library Management System");
+        
+        //Propagate.PropogateLibrary();
+
         bool done = false;
         while (!done)
         {
             const string m =
-            "\n 1. Add a Book\n" +
-            " 2. List Authors and their books \n" +
+            "\n 1. Register Author \n" +
+            " 2. Edit Book or Author \n" +
             " 3. List Books that are in Library and are available\n" +
             " 4. Delete \n" +
             " 5. Borrow a Book \n" +
             " 6. See what books are lent out\n" +
             " 7. Reboot Library\n" +
-            " 8. Edit Book or Author\n" +
+        
             " 9. Exit";
 
             Console.WriteLine(m);
@@ -26,33 +29,32 @@ static class Program
             switch (Console.ReadKey(intercept: true).Key)
             {
                 case ConsoleKey.D1:
-                    //AddData.AddBookAndAuthor();
-                    Register.RegisterBook();
+                    Register.RegisterAuthor();
                     break;
 
                 case ConsoleKey.D2:
-                    ReadData.ShowAuthors();
+                    ReadData.EditAuthors();
                     break;
 
-                /*case ConsoleKey.D3:
-                    ReadData.ListAvailableBooks();
+                case ConsoleKey.D3:
+                    CheckoutBook.ListAvailableBooks();
                     break;
 
-                case ConsoleKey.D4:
-                    CheckoutBook.ReturnAllBooks();
+               case ConsoleKey.D4:
+                    //CheckoutBook.DeleteBook();
                     break;
 
-                case ConsoleKey.D5:
-                    CheckoutBook.LentOutAllBooksBooks();
+                 case ConsoleKey.D5:
+                    CheckoutBook.BorrowBooks();
                     break;
 
                 case ConsoleKey.D6:
-                    CheckoutBook.ShowBorrowedBooks();
-                    break;*/
+                    CheckoutBook.ListAllLentOutBooks();
+                    break;
 
                 case ConsoleKey.D7:
-                    
-                    Propagate.PropogateAuthor();
+                    Propagate.RebootLibrary();
+                    Propagate.PropogateLibrary();
                     break;
 
                 case ConsoleKey.D9:
