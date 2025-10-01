@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Identity.Client;
 public class ReadData
 {
     public static void EditAuthors()
@@ -59,7 +60,8 @@ public class ReadData
 
                     }
                     Console.WriteLine("\n 'Add' To add a new book for this author");
-                    Console.WriteLine(" 'Delete' To delete this author (and all their books)");
+                    Console.WriteLine("\n'Delete' books to this author");
+                    Console.WriteLine(" 'Delete Author' To delete this author (and all their books)");
 
                     var input = Console.ReadLine()?.Trim();
 
@@ -70,14 +72,12 @@ public class ReadData
                     }
                     else if (input.Equals("Delete", StringComparison.OrdinalIgnoreCase))
                     {
-                        /*var credits = context.Credits.Where(c => c.AuthorId == selectedAuthor.AuthorId).ToList();
-                        context.Credits.RemoveRange(credits);
-                        context.Authors.Remove(selectedAuthor);
-                        context.SaveChanges();
-                        Console.WriteLine($"Author {selectedAuthor.Name} and their books have been deleted.");
-                        continue;
-                        */
                         DeleteBook(selectedAuthor);
+                    }
+                    else if (input.Equals("Delete Author", StringComparison.OrdinalIgnoreCase))
+                    {
+                        DeleteAuthor(selectedAuthor);
+
                     }
                 }
 
@@ -97,24 +97,6 @@ public class ReadData
     {
         Console.Clear();
         using var context = new AppDbContext();
-
-        /*if (!context.Books.Any())
-        {
-            Console.WriteLine("No books found.");
-            return;
-        }
-        var books = context.Credits
-       .Where(c => c.AuthorId == selectedAuthor.AuthorId)
-       .Include(c => c.Book)
-       .Select(c => c.Book)
-       .Distinct()
-       .OrderBy(b => b.Title)
-       .ToList();
-
-        foreach (var book in books)
-        {
-            Console.WriteLine($"{book.Title}");
-        }*/
         
         var books = context.Books.OrderBy(b => b.Title).ToList();
 
@@ -128,7 +110,7 @@ public class ReadData
             Console.Write("\nChoose a book to delete: ");
             if (int.TryParse(Console.ReadLine(), out int choice))
             {
-                Console.WriteLine("Wamsk");
+               
                 if (choice == 0) return;
 
                 if (choice > 0 && choice <= books.Count)
@@ -142,41 +124,27 @@ public class ReadData
                 }
             }
     }
-    
-    public static void DeleteAuthor()
+
+    public static void DeleteAuthor(Author selectedAuthor)
     {
         Console.Clear();
         using var context = new AppDbContext();
+        Console.WriteLine($"Are you sure you want to delete the author '{selectedAuthor.Name}' and all their books? (Y/N)");
 
-        if (!context.Authors.Any())
+        var confirm = Console.ReadLine()?.Trim().ToUpper();
+
+        if (confirm == "Y")
         {
-            Console.WriteLine("No authors found.");
-            return;
+            var credits = context.Credits.Where(c => c.AuthorId == selectedAuthor.AuthorId).ToList();
+            context.Credits.RemoveRange(credits);
+            context.Authors.Remove(selectedAuthor);
+            context.SaveChanges();
+
+            Console.WriteLine($"Author '{selectedAuthor.Name}' and their books have been deleted.");
         }
-        var authors = context.Authors.OrderBy(a => a.Name).ToList();
-
-        Console.WriteLine("--- Authors ---\n");
-        for (int i = 0; i < authors.Count; i++)
+        else
         {
-            Console.WriteLine($"{i + 1}. {authors[i].Name}");
-        }
-        Console.WriteLine("\n0. Exit author menu");
-
-        Console.Write("\nChoose an author to delete: ");
-        if (int.TryParse(Console.ReadLine(), out int choice))
-        {
-            if (choice == 0) return;
-
-            if (choice > 0 && choice <= authors.Count)
-            {
-                var selectedAuthor = authors[choice - 1];
-
-                var credits = context.Credits.Where(c => c.AuthorId == selectedAuthor.AuthorId).ToList();
-                context.Credits.RemoveRange(credits);
-                context.Authors.Remove(selectedAuthor);
-                context.SaveChanges();
-                Console.WriteLine($"Author {selectedAuthor.Name} and their books have been deleted.");
-            }
+            Console.WriteLine("Deletion canceled.");
         }
     }
 }

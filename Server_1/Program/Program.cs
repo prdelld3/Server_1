@@ -14,7 +14,7 @@ static class Program
         while (!done)
         {
             const string m =
-            "\n 1. Register Author \n" +
+            //"\n 1. Register Author \n" +
             " 2. Edit Book or Author \n" +
             " 3. List Books that are in Library and are available\n" +
             " 4. Delete \n" +
