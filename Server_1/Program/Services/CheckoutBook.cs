@@ -17,7 +17,7 @@ public static class CheckoutBook
             Console.WriteLine("No books found.");
             return;
         }
-
+        
         Console.WriteLine("--- Available Books ---");
 
         for (int i = 0; i < books.Count; i++)
@@ -28,31 +28,69 @@ public static class CheckoutBook
     }
 
     public static void ListAllLentOutBooks()
+{
+    Console.Clear();
+    using var context = new AppDbContext();
+    var books = context.Books
+        .Include(b => b.Loan)
+        .Where(b => b.Loan != null)
+        .ToList();
+
+    if (!books.Any())
+    {
+        Console.WriteLine("No books are currently lent out.");
+        return;
+    }
+
+    while (true)
     {
         Console.Clear();
-        using var context = new AppDbContext();
-        var books = context.Books
-            .Include(b => b.Loan)
-            .Where(b => b.Loan != null)
-            .ToList();
-
-        if (!books.Any())
-        {
-            Console.WriteLine("No books found.");
-            return;
-        }
-
         Console.WriteLine("--- Lent Out Books ---\n");
-        foreach (var book in books)
+
+        for (int i = 0; i < books.Count; i++)
         {
-            var authors = string.Join(", ", book.Credits.Select(c => c.Author?.Name));
-            Console.WriteLine($"=== {book.Title} by {authors} (Due: {book.Loan.DueDate}) ===");
+            var authors = string.Join(", ", books[i].Credits.Select(c => c.Author?.Name));
+            Console.WriteLine($"{i + 1}. {books[i].Title} by {authors} (Due: {books[i].Loan?.DueDate:yyyy-MM-dd})");
         }
-        if (ConsoleKey.D1 == Console.ReadKey(intercept: true).Key)
+
+        Console.Write("\nSelect a book number to return (or 0 to cancel): ");
+        if (int.TryParse(Console.ReadLine(), out int choice))
         {
-            ReturnAllBooks();
+            if (choice == 0) break; 
+
+            if (choice > 0 && choice <= books.Count)
+            {
+                var selectedBook = books[choice - 1];
+                selectedBook.Loan = null;
+                context.SaveChanges();
+                Console.WriteLine($"Returned '{selectedBook.Title}'.");
+                
+            
+                books = context.Books
+                    .Include(b => b.Loan)
+                    .Where(b => b.Loan != null)
+                    .ToList();
+
+                if (!books.Any())
+                {
+                    Console.WriteLine("\nAll books have been returned.");
+                    break;
+                }
+
+                Console.WriteLine("\nPress any key to continue...");
+                Console.ReadKey(intercept: true);
+            }
+            else
+            {
+                Console.WriteLine("Invalid choice. Try again.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Try again.");
         }
     }
+}
 
     public static void BorrowBooks()
     {

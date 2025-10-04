@@ -1,10 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Identity.Client;
 public class ReadData
 {
     public static void EditAuthors()
@@ -60,7 +54,7 @@ public class ReadData
 
                     }
                     Console.WriteLine("\n 'Add' To add a new book for this author");
-                    Console.WriteLine("\n'Delete' books to this author");
+                    Console.WriteLine("\n 'Delete' books to this author");
                     Console.WriteLine(" 'Delete Author' To delete this author (and all their books)");
 
                     var input = Console.ReadLine()?.Trim();

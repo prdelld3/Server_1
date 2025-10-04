@@ -6,21 +6,19 @@ static class Program
     static void Main()
     {
         Console.Clear();
-        Console.WriteLine("Library Management System");
-        
-        //Propagate.PropogateLibrary();
+        Console.WriteLine("Library Management System\n");
 
         bool done = false;
         while (!done)
         {
             const string m =
-            //"\n 1. Register Author \n" +
-            " 2. Edit Book or Author \n" +
-            " 3. List Books that are in Library and are available\n" +
-            " 4. Delete \n" +
-            " 5. Borrow a Book \n" +
-            " 6. See what books are lent out\n" +
-            " 7. Reboot Library\n" +
+        
+            " 1. Edit Book or Author \n" +
+            " 2. List Books that are in Library and are available\n" +
+            " 3. Borrow a Book \n" +
+            " 4. See what books are lent out\n" +
+            //" 5. Return a book\n" + 
+            " 6. Reboot Library\n" +
         
             " 9. Exit";
 
@@ -29,30 +27,22 @@ static class Program
             switch (Console.ReadKey(intercept: true).Key)
             {
                 case ConsoleKey.D1:
-                    Register.RegisterAuthor();
-                    break;
-
-                case ConsoleKey.D2:
                     ReadData.EditAuthors();
                     break;
 
-                case ConsoleKey.D3:
+                case ConsoleKey.D2:
                     CheckoutBook.ListAvailableBooks();
                     break;
 
-               case ConsoleKey.D4:
-                    //CheckoutBook.DeleteBook();
-                    break;
-
-                 case ConsoleKey.D5:
+                 case ConsoleKey.D3:
                     CheckoutBook.BorrowBooks();
                     break;
 
-                case ConsoleKey.D6:
+                case ConsoleKey.D4:
                     CheckoutBook.ListAllLentOutBooks();
                     break;
 
-                case ConsoleKey.D7:
+                case ConsoleKey.D6:
                     Propagate.RebootLibrary();
                     Propagate.PropogateLibrary();
                     break;
